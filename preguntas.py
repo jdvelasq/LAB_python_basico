@@ -11,7 +11,7 @@ Utilice el archivo `data.csv` para resolver las preguntas.
 
 
 """
-
+import csv
 
 def pregunta_01():
     """
@@ -21,7 +21,13 @@ def pregunta_01():
     214
 
     """
-    return
+    total = 0
+
+    with open("data.csv") as file:
+        reader = csv.reader(file, delimiter="\t")
+        for row in reader:
+            total += int(row[1])
+    return total
 
 
 def pregunta_02():
@@ -39,7 +45,21 @@ def pregunta_02():
     ]
 
     """
-    return
+    letters = dict()
+
+    with open("data.csv") as file:
+        reader = csv.reader(file, delimiter="\t")
+        for row in reader:
+            if not row[0] in letters.keys():
+                letters[row[0]] = 1
+            else:
+                letters[row[0]] += 1
+    
+    lettersList = [
+        (k,letters[k]) for k in sorted(list(letters.keys()))
+    ]
+    
+    return lettersList
 
 
 def pregunta_03():
@@ -57,7 +77,21 @@ def pregunta_03():
     ]
 
     """
-    return
+    letters = dict()
+
+    with open("data.csv") as file:
+        reader = csv.reader(file, delimiter="\t")
+        for row in reader:
+            if not row[0] in letters.keys():
+                letters[row[0]] = int(row[1])
+            else:
+                letters[row[0]] += int(row[1])
+    
+    lettersList = [
+        (k,letters[k]) for k in sorted(list(letters.keys()))
+    ]
+
+    return lettersList
 
 
 def pregunta_04():
@@ -82,7 +116,21 @@ def pregunta_04():
     ]
 
     """
-    return
+    months = dict()
+
+    with open("data.csv") as file:
+        reader = csv.reader(file, delimiter="\t")
+        for row in reader:
+            if not row[2][5:7] in months.keys():
+                months[row[2][5:7]] = 1
+            else:
+                months[row[2][5:7]] += 1
+    
+    monthsList = [
+        (k,months[k]) for k in sorted(list(months.keys()))
+    ]
+    
+    return monthsList
 
 
 def pregunta_05():
@@ -100,7 +148,21 @@ def pregunta_05():
     ]
 
     """
-    return
+    letters = dict()
+
+    with open("data.csv") as file:
+        reader = csv.reader(file, delimiter="\t")
+        for row in reader:
+            if not row[0] in letters.keys():
+                letters[row[0]] = [int(row[1])]
+            else:
+                letters[row[0]] += [int(row[1])]
+    
+    lettersList = [
+        (k,max(letters[k]),min(letters[k])) for k in sorted(list(letters.keys()))
+    ]
+    
+    return lettersList
 
 
 def pregunta_06():
@@ -125,7 +187,26 @@ def pregunta_06():
     ]
 
     """
-    return
+    letters = dict()
+
+    with open("data.csv") as file:
+        reader = csv.reader(file, delimiter="\t")
+        
+        for row in reader:
+            dictrow = row[-1].split(",")
+            for pair in dictrow:
+                if not pair[:4] in letters.keys():
+                    letters[pair[:4]] = [int(pair[4:])]
+                else:
+                    letters[pair[:4]] += [int(pair[4:])]
+
+    
+    lettersList = [
+        (k,min(letters[k]),max(letters[k])) for k in sorted(list(letters.keys()))
+    ]
+    
+
+    return lettersList
 
 
 def pregunta_07():
@@ -149,7 +230,21 @@ def pregunta_07():
     ]
 
     """
-    return
+    letters = dict()
+
+    with open("data.csv") as file:
+        reader = csv.reader(file, delimiter="\t")
+        for row in reader:
+            if not int(row[1]) in letters.keys():
+                letters[int(row[1])] = [row[0]]
+            else:
+                letters[int(row[1])] += [row[0]]
+    
+    lettersList = [
+        (k,letters[k]) for k in sorted(list(letters.keys()))
+    ]
+    
+    return lettersList
 
 
 def pregunta_08():
@@ -174,7 +269,22 @@ def pregunta_08():
     ]
 
     """
-    return
+    letters = dict()
+
+    with open("data.csv") as file:
+        reader = csv.reader(file, delimiter="\t")
+        for row in reader:
+            if not int(row[1]) in letters.keys():
+                letters[int(row[1])] = [row[0]]
+            else:
+                letters[int(row[1])] += [row[0]]
+    
+    lettersList = [
+        (k,sorted(set(letters[k]))) for k in sorted(list(letters.keys()))
+    ]
+    
+    return lettersList
+
 
 
 def pregunta_09():
@@ -197,7 +307,25 @@ def pregunta_09():
     }
 
     """
-    return
+    letters = dict()
+
+    with open("data.csv") as file:
+        reader = csv.reader(file, delimiter="\t")
+        
+        for row in reader:
+            dictrow = row[-1].split(",")
+            for pair in dictrow:
+                if not pair[:4] in letters.keys():
+                    letters[pair[:4]] = 1
+                else:
+                    letters[pair[:4]] += 1
+
+    
+    lettersList = [
+        (k,letters[k]) for k in sorted(list(letters.keys()))
+    ]
+
+    return lettersList
 
 
 def pregunta_10():
@@ -218,7 +346,16 @@ def pregunta_10():
 
 
     """
-    return
+
+    with open("data.csv") as file:
+        reader = csv.reader(file, delimiter="\t")
+        
+        letters = [
+            (row[0], len(row[3].split(",")), len(row[4].split(",")))
+            for row in reader
+        ]
+
+    return letters
 
 
 def pregunta_11():
@@ -239,7 +376,25 @@ def pregunta_11():
 
 
     """
-    return
+    letters = dict()
+
+    with open("data.csv") as file:
+        reader = csv.reader(file, delimiter="\t")
+        
+        for row in reader:
+            dictrow = row[3].split(",")
+            for pair in dictrow:
+                if not pair in letters.keys():
+                    letters[pair[:4]] = int(row[1])
+                else:
+                    letters[pair[:4]] += int(row[1])
+
+    
+    lettersList = [
+        (k,letters[k]) for k in sorted(list(letters.keys()))
+    ]
+
+    return lettersList
 
 
 def pregunta_12():
@@ -257,4 +412,22 @@ def pregunta_12():
     }
 
     """
-    return
+    letters = dict()
+
+    with open("data.csv") as file:
+        reader = csv.reader(file, delimiter="\t")
+        
+        for row in reader:
+            dictrow = row[4].split(",")
+            for pair in dictrow:
+                if not row[0] in letters.keys():
+                    letters[row[0]] = int(pair[4:])
+                else:
+                    letters[row[0]] += int(pair[4:])
+
+    
+    lettersList = [
+        (k,letters[k]) for k in sorted(list(letters.keys()))
+    ]
+
+    return lettersList
