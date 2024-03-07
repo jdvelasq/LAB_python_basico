@@ -21,7 +21,16 @@ def pregunta_01():
     214
 
     """
-    return
+    suma_segunda_col = 0 
+
+    with open('data.csv','r') as file:
+        for line in file:
+            columns = line.strip().split('\t')
+            suma_segunda_col += int(columns[1])
+
+
+    return suma_segunda_col
+
 
 
 def pregunta_02():
@@ -39,7 +48,16 @@ def pregunta_02():
     ]
 
     """
-    return
+    conteo_por_letra = {}
+
+    with open('data.csv','r') as file:
+        for line in file:
+            first_column = line.strip().split('\t')[0]
+            conteo_por_letra[first_column] = conteo_por_letra.get(first_column,0)+1
+    conteo_ordenado = sorted(conteo_por_letra.items())
+
+    return conteo_ordenado
+
 
 
 def pregunta_03():
@@ -57,7 +75,18 @@ def pregunta_03():
     ]
 
     """
-    return
+    suma_por_letra = {}
+
+    with open('data.csv','r') as file:
+        for line in file:
+            columns = line.strip().split('\t')
+            letra = columns[0]
+            valor_segunda_columna = int(columns[1])
+            suma_por_letra[letra] = suma_por_letra.get(letra,0) + valor_segunda_columna
+    suma_ordenada = sorted(suma_por_letra.items())
+
+    return suma_ordenada
+
 
 
 def pregunta_04():
@@ -82,7 +111,20 @@ def pregunta_04():
     ]
 
     """
-    return
+    registro_por_mes = {}
+    with open('data.csv','r') as file:
+        for line in file:
+            columns = line.strip().split('\t')
+            fecha = columns[2]
+            mes = fecha.split('-')[1]
+            registro_por_mes[mes] = registro_por_mes.get(mes,0) + 1
+
+    registros_ordenados = sorted(registro_por_mes.items())   
+    
+    return registros_ordenados
+
+
+
 
 
 def pregunta_05():
@@ -100,7 +142,21 @@ def pregunta_05():
     ]
 
     """
-    return
+    max_min_por_letra = {}
+
+    with open('data.csv','r') as file:
+        for line in file:
+            columns = line.strip().split('\t')
+            letra = columns[0]
+            valor_columns_2 = int(columns[1])
+            max_valor, min_valor = max_min_por_letra.get(letra,(float('-inf'),float('inf')))
+            max_min_por_letra[letra] = (max(max_valor,valor_columns_2),min(min_valor,valor_columns_2))
+    
+    max_min_lista = sorted([(letra,max_valor,min_valor) for letra, (max_valor,min_valor) in max_min_por_letra.items()])
+
+    return max_min_lista
+
+
 
 
 def pregunta_06():
@@ -125,8 +181,31 @@ def pregunta_06():
     ]
 
     """
-    return
+    valores_por_clave = {}
 
+    with open('data.csv', 'r') as file:
+        
+        for line in file:
+            columns = line.strip().split('\t')
+            columna_5 = columns[4]
+            pares_clave_valor = columna_5.split(',')
+            for par in pares_clave_valor:
+                clave, valor = par.split(':')
+                valores_actuales = valores_por_clave.get(clave,[])
+                valores_actuales.append(int(valor))
+                valores_por_clave[clave] = valores_actuales
+    resultados = []
+
+    for clave, valores in valores_por_clave.items():
+        min_valor = min(valores)
+        max_valor = max(valores)
+        resultados.append((clave,min_valor,max_valor))
+
+    resultados_ordenados = sorted(resultados)
+
+    return resultados_ordenados
+
+print(pregunta_06())
 
 def pregunta_07():
     """
