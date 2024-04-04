@@ -1,3 +1,4 @@
+
 """
 Laboratorio de Programación Básica en Python para Manejo de Datos
 -----------------------------------------------------------------------------------------
@@ -13,7 +14,27 @@ Utilice el archivo `data.csv` para resolver las preguntas.
 """
 
 
+import csv
+
+def lectura_de_documento():
+        
+    
+# leo el documento csv
+
+    archivo_csv="data.csv"
+    with open (archivo_csv,"r") as file:
+        lista_texto=file.readlines()
+
+# organizar los datos, reemplazar sonido de carro por espacio y separar en una lista de listas
+    lista_texto=[i.replace("\n","") for i in lista_texto]
+    lista_texto=[i.split("\t") for i in lista_texto]
+    
+    return lista_texto
+
+lectura_de_documento()
+
 def pregunta_01():
+
     """
     Retorne la suma de la segunda columna.
 
@@ -21,15 +42,26 @@ def pregunta_01():
     214
 
     """
-    suma_segunda_col = 0 
+    # Variable para la función de lectura del csv
+    lectura = lectura_de_documento()
 
-    with open('data.csv','r') as file:
-        for line in file:
-            columns = line.strip().split('\t')
-            suma_segunda_col += int(columns[1])
+    # Creación de:
+    # 1. Lista para almacenar los datos de la segunda columna
+    # 2. Variable que me permtirá sumar los valores
+    # Nota: los valores en la lista ingresarán como tipo número 
 
+    suma=0
+    lista_columna2=[]
 
-    return suma_segunda_col
+    for lista_interna in lectura:
+        lista_columna2.append(int(lista_interna[1]))
+
+    # Iteración para sumar los números 
+
+    for i in lista_columna2:
+        suma+=i
+        
+    return suma
 
 
 
@@ -48,15 +80,33 @@ def pregunta_02():
     ]
 
     """
-    conteo_por_letra = {}
+    lista_texto=lectura_de_documento()
 
-    with open('data.csv','r') as file:
-        for line in file:
-            first_column = line.strip().split('\t')[0]
-            conteo_por_letra[first_column] = conteo_por_letra.get(first_column,0)+1
-    conteo_ordenado = sorted(conteo_por_letra.items())
+    # Creación de una lista y un diccionario vacío
 
-    return conteo_ordenado
+    lista=[]
+    diccionario={}
+
+    # Conformar la lista con una tupla que contiene la letra y un valor 1
+    # Ordenar la lista con base en el primer elemento de la tupla x[0] a través de una función anónima
+
+    for i in lista_texto:
+        lista.append((i[0],1))
+        lista= sorted(lista, key=lambda x:x[0])
+
+    # A partir de la tupla conformada por clave, valor, lleno el diccionario.
+    for key, value in lista:
+        if key not in diccionario.keys():
+            diccionario[key]=[]
+        diccionario[key].append(value)
+    
+# realizo la sumatoria de los valores, a partir de una lista vacía
+    respuesta=[]
+
+    for key, valor in diccionario.items():
+        respuesta.append((key,sum(valor)))
+    
+    return respuesta
 
 
 
@@ -75,17 +125,36 @@ def pregunta_03():
     ]
 
     """
-    suma_por_letra = {}
+    lista_texto=lectura_de_documento()
 
-    with open('data.csv','r') as file:
-        for line in file:
-            columns = line.strip().split('\t')
-            letra = columns[0]
-            valor_segunda_columna = int(columns[1])
-            suma_por_letra[letra] = suma_por_letra.get(letra,0) + valor_segunda_columna
-    suma_ordenada = sorted(suma_por_letra.items())
+# creamos una lista y un diccionario vacio
 
-    return suma_ordenada
+    lista=[]
+    diccionario={}
+
+# llenamos la lista creada con una tupla, conformada por columna 1 y columna 2
+# la columna dos debe convertirse en número entero. 
+
+    for i in lista_texto:
+        lista.append((i[0],int(i[1])))
+        lista=sorted(lista,key=lambda x:x[0])
+
+# llenamos el diccionario con las tuplas, con clave, valor
+## preguntarle a Alejo la parte del append
+
+    for key, value in lista:
+        if key not in diccionario:
+            diccionario[key]=[]
+        diccionario[key].append(value)
+
+    respuesta=[]
+
+# realizo la sumatoria a partir del método items, el cual permite iterar sobre diccionarios
+
+    for key, value in diccionario.items():
+        respuesta.append((key,sum(value)))
+
+    return respuesta
 
 
 
@@ -109,22 +178,33 @@ def pregunta_04():
         ("11", 2),
         ("12", 3),
     ]
-
     """
-    registro_por_mes = {}
-    with open('data.csv','r') as file:
-        for line in file:
-            columns = line.strip().split('\t')
-            fecha = columns[2]
-            mes = fecha.split('-')[1]
-            registro_por_mes[mes] = registro_por_mes.get(mes,0) + 1
+    lista_texto=lectura_de_documento()
 
-    registros_ordenados = sorted(registro_por_mes.items())   
-    
-    return registros_ordenados
+    lista=[]
 
+    for i in lista_texto:
+        lista.append((i[2].split("-")[1]))
 
+    lista_mes=[]   
 
+    for i in lista:
+        lista_mes.append((i,1))
+        lista_mes= sorted(lista_mes,key=lambda x:x[0])
+
+    diccionario={}
+
+    for key, value in lista_mes:
+        if key not in diccionario:
+            diccionario[key]=[]
+        diccionario[key].append(value)
+
+    respuesta=[]
+
+    for key, value in diccionario.items():
+        respuesta.append((key,sum(value)))
+
+    return respuesta
 
 
 def pregunta_05():
@@ -140,23 +220,31 @@ def pregunta_05():
         ("D", 8, 3),
         ("E", 9, 1),
     ]
-
     """
-    max_min_por_letra = {}
+    lista_texto=lectura_de_documento()
 
-    with open('data.csv','r') as file:
-        for line in file:
-            columns = line.strip().split('\t')
-            letra = columns[0]
-            valor_columns_2 = int(columns[1])
-            max_valor, min_valor = max_min_por_letra.get(letra,(float('-inf'),float('inf')))
-            max_min_por_letra[letra] = (max(max_valor,valor_columns_2),min(min_valor,valor_columns_2))
-    
-    max_min_lista = sorted([(letra,max_valor,min_valor) for letra, (max_valor,min_valor) in max_min_por_letra.items()])
+    lista=[]
 
-    return max_min_lista
+    for i in lista_texto:
+        lista.append((i[0],int(i[1])))
+        lista=sorted(lista,key= lambda x:x[0])
 
+    diccionario={}
 
+    for key, value in lista:
+        if key not in diccionario:
+            diccionario[key]=[]
+        diccionario[key].append(value)
+
+    respuesta=[]
+
+    for key, value in diccionario.items():
+        respuesta.append((key,max(value),min(value)))
+
+    return respuesta
+
+# respuesta_05= pregunta_05()
+# print(respuesta_05)
 
 
 def pregunta_06():
@@ -181,31 +269,38 @@ def pregunta_06():
     ]
 
     """
-    valores_por_clave = {}
+    lista_texto=lectura_de_documento()
 
-    with open('data.csv', 'r') as file:
-        
-        for line in file:
-            columns = line.strip().split('\t')
-            columna_5 = columns[4]
-            pares_clave_valor = columna_5.split(',')
-            for par in pares_clave_valor:
-                clave, valor = par.split(':')
-                valores_actuales = valores_por_clave.get(clave,[])
-                valores_actuales.append(int(valor))
-                valores_por_clave[clave] = valores_actuales
-    resultados = []
+# lista = [i[4].split(",") for i in lista_texto[0:]]
+    lista=[]
 
-    for clave, valores in valores_por_clave.items():
-        min_valor = min(valores)
-        max_valor = max(valores)
-        resultados.append((clave,min_valor,max_valor))
+    for i in lista_texto:
+        lista.append(i[4].split(","))
 
-    resultados_ordenados = sorted(resultados)
+    lista_2 = []
+    lista_3= []
+    
+    for i in lista:
+        for j in i:
+            lista_2 = tuple(j.split(":"))
+            lista_3.append(lista_2)
 
-    return resultados_ordenados
+    lista_3=sorted(lista_3,key=lambda x:x[0])
 
-print(pregunta_06())
+    diccionario={}
+
+    for key, value in lista_3:
+        if key not in diccionario.keys(): 
+            diccionario[key]=[]
+        diccionario[key].append(int(value))
+
+    respuesta=[]
+
+    for key, value in diccionario.items():
+        respuesta.append((key,min(value),max(value)))
+
+    return respuesta
+
 
 def pregunta_07():
     """
@@ -228,8 +323,28 @@ def pregunta_07():
     ]
 
     """
-    return
+    lista_texto=lectura_de_documento()
 
+    lista=[]
+
+    for i in lista_texto:
+        lista.append((int(i[1]),i[0]))
+        lista = sorted(lista, key=lambda x: x[0])
+    
+    diccionario= {}
+
+    for key, value in lista:
+        if key not in diccionario.keys():
+            diccionario[key]=[]
+        diccionario[key].append(value)
+
+    respuesta=[]
+
+    for key, value in diccionario.items():
+        respuesta.append((key, value))
+        
+
+    return respuesta
 
 def pregunta_08():
     """
@@ -253,7 +368,32 @@ def pregunta_08():
     ]
 
     """
-    return
+    lista_texto=lectura_de_documento()
+
+    lista=[]
+
+    for i in lista_texto:
+        lista.append((int(i[1]),i[0]))
+        lista = sorted(lista, key=lambda x: x[0])
+    
+    diccionario= {}
+
+    for key, value in lista:
+        if key not in diccionario.keys():
+            diccionario[key]=[]
+        diccionario[key].append(value)
+
+    respuesta=[]
+
+    for key, value in diccionario.items():
+        value=list(set(value))
+        values= "".join(value)
+        values= sorted(values)
+    
+        respuesta.append((key, values))
+
+    return respuesta
+
 
 
 def pregunta_09():
@@ -276,7 +416,35 @@ def pregunta_09():
     }
 
     """
-    return
+    lista_texto=lectura_de_documento()
+
+    lista=[i[4].split(",") for i in lista_texto]
+
+    lista_3=[]
+
+    for i in lista:
+        for j in i:
+            lista_2= tuple(j.split(":"))
+            lista_3.append(lista_2)
+
+    lista_3= sorted(lista_3, key=lambda x: x[0])
+
+    diccionario={}
+
+    for key, value in lista_3:
+        if key not in diccionario.keys():
+            diccionario[key]=[]
+        diccionario[key].append(len(value))
+    
+    lista_4=[]
+
+    for key, value in diccionario.items():
+        lista_4.append((key,len(value)))
+
+    respuesta={key:value for key,value in lista_4}
+
+    return respuesta
+
 
 
 def pregunta_10():
@@ -297,7 +465,15 @@ def pregunta_10():
 
 
     """
-    return
+    lista_texto=lectura_de_documento()
+
+    respuesta=[]
+
+    for i in lista_texto:
+        respuesta.append((i[0],len(i[3].split(",")), len(i[4].split(","))))
+
+    return respuesta
+
 
 
 def pregunta_11():
@@ -318,7 +494,39 @@ def pregunta_11():
 
 
     """
-    return
+    lista_texto=lectura_de_documento()
+
+    lista=[]
+
+    for i in lista_texto:
+        lista.append((i[3].split(","), int(i[1])))
+
+    lista_tupla=[]
+
+
+    for key, value in lista:
+        for j in key:
+            lista_tupla.append((j,value))
+
+    lista_ordenada= sorted(lista_tupla,key= lambda x:x[0])
+
+    diccionario={}
+
+    for key, value in lista_ordenada:
+        if key not in diccionario.keys():
+            diccionario[key]=[]
+        diccionario[key].append(value)
+    
+    Lista_prueba=[]
+
+    for key, value in diccionario.items():
+        Lista_prueba.append((key, sum(value)))
+
+    respuesta={key:value for key, value in Lista_prueba}
+
+    return respuesta
+
+
 
 
 def pregunta_12():
@@ -336,4 +544,37 @@ def pregunta_12():
     }
 
     """
-    return
+    lista_texto=lectura_de_documento()
+    
+    lista = []
+    diccionario ={}
+
+    for i in lista_texto:
+        
+        lista.append((i[0], i[4].split(",") ))         
+
+    list_tupla = []
+    list_tupla_2 = []
+    
+    for key, value in lista:        
+        for i in value:
+            list_tupla.append((key, i.split(":")))
+            
+    for key, value in list_tupla:
+        list_tupla_2.append((key, int(value[1])))
+
+    list_tupla_2 = sorted(list_tupla_2, key=lambda x: x[0])
+
+    for key, value in list_tupla_2:
+        if key not in diccionario.keys():
+            diccionario[key] = []
+        diccionario[key].append(value)
+        
+    list_Prob = []
+
+    for key, value in diccionario.items():
+            list_Prob.append((key, sum(value)))
+
+    respuesta = {key:value for key, value in list_Prob}    
+
+    return respuesta
