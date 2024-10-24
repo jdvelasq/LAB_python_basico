@@ -13,6 +13,9 @@ run_test() {
     fi
 }
 
+# Template to use in GitHub Classroom:
+# ./setup.sh
+# pytest tests/test_pregunta_01.py --maxfail=1 --disable-warnings -q
 run_test "tests/test_pregunta_01.py" "pregunta_01"
 run_test "tests/test_pregunta_02.py" "pregunta_02"
 run_test "tests/test_pregunta_03.py" "pregunta_03"
